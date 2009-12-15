@@ -8,6 +8,7 @@
 class amavisd-new {
     case $operatingsystem {
         gentoo: { include amavisd-new::gentoo }
+        debian,ubuntu: { include amavisd-new::debian }
         default: { include amavisd-new::base }
     }
 }
@@ -20,7 +21,7 @@ class amavisd-new::base {
             Package[cabextract],
             Package[freeze],
             Package[unrar],
-            Package[unarj],
+            #Package[unarj],   # doesnt exist in debian lenny anymore, is package arj useful ?
             Package[lha],
             Package[zoo]
         ],
@@ -38,9 +39,6 @@ class amavisd-new::base {
     package{'unrar':
         ensure => installed
     }
-    package{'unarj':
-        ensure => installed
-    }
     package{'lha':
         ensure => installed
     }
@@ -48,13 +46,38 @@ class amavisd-new::base {
         ensure => installed
     }
 
+    case $operatingsystem {
+      debian: {$amavisd_servicename = "amavis," }
+      default: {$amavisd_servicename = "amavisd"}
+      }
+
     service{amavisd:
-        ensure => running,
-        enable => true,
-        #hasstatus => true, #fixme!
-        require => Package[amavisd-new],
+	name => $amavisd_servicename,
+	ensure => running,
+	enable => true,
+	#hasstatus => true, #fixme!
+	require => Package[amavisd-new],
+    }
+}	
+
+class amavisd-new::debian inherits amavisd-new::base {
+    file {"/etc/amavis/conf.d/15-content_filter_mode":
+	  source => "puppet:///amavisd-new/debian/15-content_filter_mode",
+	  mode => 0644, owner => root, group => root,
+	  require => Package[amavisd-new],
+	  notify => Service[amavisd];
     }
 
+    file {"/etc/amavis/conf.d/20-debian_defaults":
+	    ensure => absent;
+    }
+
+    file {"/etc/amavis/conf.d/20-custom-amavisd":
+      source => "puppet:///amavisd-new/debian/20-custom-amavisd",
+      mode => 0644, owner => root, group => root,
+      require => Package[amavisd-new],
+      notify => Service[amavisd];
+    }
 }
 
 class amavisd-new::gentoo inherits amavisd-new::base {
@@ -83,4 +106,10 @@ class amavisd-new::gentoo inherits amavisd-new::base {
     Package[zoo]{
         category => 'app-arch',
     }
+
+    package{'unarj':
+       ensure => installed
+    }
+
+
 }
