@@ -47,7 +47,7 @@ class amavisd-new::base {
     }
 
     case $operatingsystem {
-      debian: {$amavisd_servicename = "amavis," }
+      debian: {$amavisd_servicename = "amavis" }
       default: {$amavisd_servicename = "amavisd"}
       }
 
