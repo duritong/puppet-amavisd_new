@@ -61,19 +61,8 @@ class amavisd-new::base {
 }	
 
 class amavisd-new::debian inherits amavisd-new::base {
-    file {"/etc/amavis/conf.d/15-content_filter_mode":
-	  source => "puppet:///amavisd-new/debian/15-content_filter_mode",
-	  mode => 0644, owner => root, group => root,
-	  require => Package[amavisd-new],
-	  notify => Service[amavisd];
-    }
-
-    file {"/etc/amavis/conf.d/20-debian_defaults":
-	    ensure => absent;
-    }
-
-    file {"/etc/amavis/conf.d/20-custom-amavisd":
-      source => "puppet:///amavisd-new/debian/20-custom-amavisd",
+    file {"/etc/amavis/conf.d/50-user":
+      source => "puppet:///amavisd-new/debian/50-user",
       mode => 0644, owner => root, group => root,
       require => Package[amavisd-new],
       notify => Service[amavisd];

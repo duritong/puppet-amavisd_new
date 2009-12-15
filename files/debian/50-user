@@ -1,0 +1,30 @@
+use strict;
+
+#
+# Place your configuration directives here.  They will override those in
+# earlier files.
+#
+# See /usr/share/doc/amavisd-new/ for documentation and examples of
+# the directives you can use in this file
+#
+
+# checks viruses
+@bypass_virus_checks_maps = (
+   \%bypass_virus_checks, \@bypass_virus_checks_acl, \$bypass_virus_checks_re);
+
+# checks for spam
+@bypass_spam_checks_maps = (
+   \%bypass_spam_checks, \@bypass_spam_checks_acl, \$bypass_spam_checks_re);
+
+$sa_kill_level_deflt = 10000; # 
+
+$final_virus_destiny      = D_REJECT; 
+$final_banned_destiny     = D_REJECT;   # D_REJECT when front-end MTA
+$final_spam_destiny       = D_PASS;
+$final_bad_header_destiny = D_PASS;     
+
+$mailfrom_notify_admin = "postmaster\@$mydomain";
+
+#------------ Do not modify anything below this line -------------
+
+1;  # ensure a defined return
