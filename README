@@ -5,6 +5,11 @@ This module will set up basic amavisd-new.
 In the debian class custom configuration will be setup, to check for spam and viruses.
 For an integration into Postfix and a sample setup, check the README from the Postfix Puppet module.
 
+Configuration
+-------------
+$amavis_viruscheck  : enables virus checks if true
+$amavis_spamcheck   : enables spam checks if true
+
 Todo
 ----
 - Optimize the content filter configuration

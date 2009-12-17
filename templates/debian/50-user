@@ -1,5 +1,7 @@
 use strict;
 
+# Managed by Puppet !!!
+
 #
 # Place your configuration directives here.  They will override those in
 # earlier files.
@@ -8,13 +10,23 @@ use strict;
 # the directives you can use in this file
 #
 
+<% if (amavis_viruscheck == "true" ) -%>
 # checks viruses
 @bypass_virus_checks_maps = (
    \%bypass_virus_checks, \@bypass_virus_checks_acl, \$bypass_virus_checks_re);
+<% else -%>
+# virus checks disabled by puppet
+<% end -%>
 
+<% if (amavis_spamcheck == "true" ) -%>
 # checks for spam
 @bypass_spam_checks_maps = (
    \%bypass_spam_checks, \@bypass_spam_checks_acl, \$bypass_spam_checks_re);
+<% else -%>
+# spam checks disabled by puppet
+<% end -%>
+
+
 
 $sa_kill_level_deflt = 10000; # 
 

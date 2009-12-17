@@ -5,6 +5,17 @@
 
 # modules_dir { "amavisd-new": }
 
+# defaults
+case $amavis_viruscheck {
+"": { $amavis_viruscheck = "false" }
+}
+
+case $amavis_spamcheck {
+"": { $amavis_spamcheck = "false" }
+}
+
+
+
 class amavisd-new {
     case $operatingsystem {
         gentoo: { include amavisd-new::gentoo }
@@ -62,7 +73,7 @@ class amavisd-new::base {
 
 class amavisd-new::debian inherits amavisd-new::base {
     file {"/etc/amavis/conf.d/50-user":
-      source => "puppet:///amavisd-new/debian/50-user",
+      content => template("amavisd-new/debian/50-user"),
       mode => 0644, owner => root, group => root,
       require => Package[amavisd-new],
       notify => Service[amavisd];
