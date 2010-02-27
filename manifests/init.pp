@@ -21,36 +21,17 @@ class amavisd-new {
 }
 
 class amavisd-new::base {
+  #unrar packages for amavis
+  package{ [ 'arc', 'cabextract', 'freeze', 'unrar', 'lha', 'zoo', 'unarj' ]:
+    ensure => installed
+  }
+
   package{'amavisd-new':
     ensure => installed,
     require => [ 
-      Package[arc],
-      Package[cabextract],
-      Package[freeze],
-      Package[unrar],
+      Package[arc, cabextract, freeze, unrar, lha, zoo]
       #Package[unarj],   # doesnt exist in debian lenny anymore, is package arj useful ?
-      Package[lha],
-      Package[zoo]
     ],
-  }
-  #unrar packages for amavis
-  package{'arc':
-    ensure => installed
-  }
-  package{'cabextract':
-    ensure => installed
-  }
-  package{'freeze':
-    ensure => installed
-  }
-  package{'unrar':
-    ensure => installed
-  }
-  package{'lha':
-    ensure => installed
-  }
-  package{'zoo':
-    ensure => installed
   }
 
   case $operatingsystem {
@@ -68,11 +49,15 @@ class amavisd-new::base {
 }	
 
 class amavisd-new::debian inherits amavisd-new::base {
+  Package['unarj']{
+    ensure => absent,
+  }
+
   file {"/etc/amavis/conf.d/50-user":
     content => template("amavisd-new/debian/50-user"),
-    mode => 0644, owner => root, group => root,
     require => Package[amavisd-new],
-    notify => Service[amavisd];
+    notify => Service[amavisd],
+    owner => root, group => 0, mode => 0644;
   }
 }
 
@@ -81,29 +66,7 @@ class amavisd-new::gentoo inherits amavisd-new::base {
     category => 'mail-filter',
   }
   #archive
-  Package[arc]{
+  Package[arc, cabextract, freeze, unrar, unarj, lha, zoo]{
     category => 'app-arch',
-  }
-  Package[cabextract]{
-    category => 'app-arch',
-  }
-  Package[freeze]{
-    category => 'app-arch',
-  }
-  Package[unrar]{
-    category => 'app-arch',
-  }
-  Package[unarj]{
-    category => 'app-arch',
-  }
-  Package[lha]{
-    category => 'app-arch',
-  }
-  Package[zoo]{
-    category => 'app-arch',
-  }
-
-  package{'unarj':
-    ensure => installed
   }
 }
