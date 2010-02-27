@@ -28,45 +28,41 @@ class amavisd-new::base {
 
   package{'amavisd-new':
     ensure => installed,
-    require => [ 
-      Package[arc, cabextract, freeze, unrar, lha, zoo]
-      #Package[unarj],   # doesnt exist in debian lenny anymore, is package arj useful ?
-    ],
-  }
-
-  case $operatingsystem {
-    debian: {$amavisd_servicename = "amavis" }
-    default: {$amavisd_servicename = "amavisd"}
+    require => Package['arc', 'cabextract', 'freeze', 'unrar', 'lha', 'zoo', 'unarj'],
   }
 
   service{amavisd:
-	  name => $amavisd_servicename,
-  	ensure => running,
-	  enable => true,
-  	hasstatus => true,
-	  require => Package[amavisd-new],
+    ensure => running,
+    enable => true,
+    hasstatus => true,
+    require => Package['amavisd-new'],
   }
 }	
 
 class amavisd-new::debian inherits amavisd-new::base {
+  # doesnt exist in debian lenny anymore, is package arj useful ?
   Package['unarj']{
     ensure => absent,
   }
 
+  Service['amavisd']{
+    name => 'amavis'
+  }
+
   file {"/etc/amavis/conf.d/50-user":
     content => template("amavisd-new/debian/50-user"),
-    require => Package[amavisd-new],
-    notify => Service[amavisd],
+    require => Package['amavisd-new'],
+    notify => Service['amavisd'],
     owner => root, group => 0, mode => 0644;
   }
 }
 
 class amavisd-new::gentoo inherits amavisd-new::base {
-  Package[amavisd-new]{
+  Package['amavisd-new']{
     category => 'mail-filter',
   }
   #archive
-  Package[arc, cabextract, freeze, unrar, unarj, lha, zoo]{
+  Package['arc', 'cabextract', 'freeze', 'unrar', 'unarj', 'lha', 'zoo']{
     category => 'app-arch',
   }
 }
