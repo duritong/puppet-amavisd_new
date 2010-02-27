@@ -31,7 +31,7 @@ class amavisd-new::base {
     require => Package['arc', 'cabextract', 'freeze', 'unrar', 'lha', 'zoo', 'unarj'],
   }
 
-  service{amavisd:
+  service{'amavisd':
     ensure => running,
     enable => true,
     hasstatus => true,
