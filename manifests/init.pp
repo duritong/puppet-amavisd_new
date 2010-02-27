@@ -5,13 +5,8 @@
 
 class amavisd-new {
   # defaults
-  case $amavis_viruscheck {
-    "": { $amavis_viruscheck = "false" }
-  }
-
-  case $amavis_spamcheck {
-    "": { $amavis_spamcheck = "false" }
-  }
+  case $amavis_viruscheck { "": { $amavis_viruscheck = "false" } }
+  case $amavis_spamcheck { "": { $amavis_spamcheck = "false" } }
 
   case $operatingsystem {
     gentoo: { include amavisd-new::gentoo }
@@ -23,7 +18,7 @@ class amavisd-new {
 class amavisd-new::base {
   #unrar packages for amavis
   package{ [ 'arc', 'cabextract', 'freeze', 'unrar', 'lha', 'zoo', 'unarj' ]:
-    ensure => installed
+    ensure => installed,
   }
 
   package{'amavisd-new':
