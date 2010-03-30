@@ -7,6 +7,7 @@ class amavisd-new::centos inherits amavisd-new::base {
                 "puppet://$server/modules/site-amavisd-new/amavisd.conf",
                 "puppet://$server/modules/amavisd-new/amavisd.conf" ],
     require => Package['amavisd-new'],
+    notify => Service['amavisd'],
     owner => root, group => 0, mode => 0644;
   }
 }
