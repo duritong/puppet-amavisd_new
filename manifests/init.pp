@@ -14,4 +14,8 @@ class amavisd-new {
     debian,ubuntu: { include amavisd-new::debian }
     default: { include amavisd-new::base }
   }
+
+  if $use_munin {
+    include amavisd-new::munin
+  }
 }
