@@ -9,7 +9,7 @@ class amavisd-new::munin {
     default: { $munin_amavis_db_location = '/var/lib/amavis/db' }
   }
 
-  munin::plugin{ [ 'amavis_state', 'amavis_content', 'amavis_time' ]:
+  munin::plugin{ [ 'amavis_cache', 'amavis_content', 'amavis_time' ]:
     require => Munin::Plugin::Deploy['amavis_'],
     ensure => 'amavis_',
     config => "env.amavis_db_home ${munin_amavis_db_location}\nuser amavis",
