@@ -1,6 +1,6 @@
 class amavisd-new::munin {
   munin::plugin::deploy{'amavis_':
-    source => "amavis/munin/amavis_",
+    source => "amavisd-new/munin/amavis_",
     ensure => absent,
   }
   
