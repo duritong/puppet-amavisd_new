@@ -3,9 +3,9 @@ class amavisd-new::centos inherits amavisd-new::base {
     name => 'arj',
   }
   file{'/etc/amavisd/amavisd.conf':
-    source => [ "puppet://$server/modules/site-amavisd-new/${fqdn}/amavisd.conf",
-                "puppet://$server/modules/site-amavisd-new/amavisd.conf",
-                "puppet://$server/modules/amavisd-new/amavisd.conf" ],
+    source => [ "puppet:///modules/site-amavisd-new/${fqdn}/amavisd.conf",
+                "puppet:///modules/site-amavisd-new/amavisd.conf",
+                "puppet:///modules/amavisd-new/amavisd.conf" ],
     require => Package['amavisd-new'],
     notify => Service['amavisd'],
     owner => root, group => 0, mode => 0644;
