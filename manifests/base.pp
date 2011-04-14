@@ -2,7 +2,7 @@ class amavisd-new::base {
   #unrar packages for amavis
   require unzip
   require unrar
-  package{ [ 'arc', 'cabextract', 'freeze', , 'lha', 'zoo', 'unarj' ]:
+  package{ [ 'arc', 'cabextract', 'freeze', 'lha', 'zoo', 'unarj' ]:
     ensure => installed,
   }
 
