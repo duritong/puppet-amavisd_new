@@ -10,4 +10,9 @@ class amavisd-new::centos inherits amavisd-new::base {
     notify => Service['amavisd'],
     owner => root, group => 0, mode => 0644;
   }
+  
+  if $selinux == 'true' {
+      File['/etc/amavisd/amavisd.conf']{
+        seltype => 'avahi_initrc_exec_t',
+  }
 }
