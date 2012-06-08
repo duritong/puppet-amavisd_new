@@ -1,4 +1,4 @@
-class amavisd-new::base {
+class amavisd_new::base {
   #unrar packages for amavis
   require unzip
   require unrar
@@ -17,4 +17,4 @@ class amavisd-new::base {
     hasstatus => true,
     require => Package['amavisd-new'],
   }
-}	
+}

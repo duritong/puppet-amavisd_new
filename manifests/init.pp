@@ -1,21 +1,20 @@
-# modules/amavisd-new/manifests/init.pp - manage amavisd-new stuff
+# manage amavisd-new stuff
 # Copyright (C) 2007 admin@immerda.ch
 # GPLv3
 # this module is part of a whole bunch of modules, please have a look at the exim module
 
-class amavisd-new {
-  # defaults
-  case $amavis_viruscheck { "": { $amavis_viruscheck = "false" } }
-  case $amavis_spamcheck { "": { $amavis_spamcheck = "false" } }
-
-  case $operatingsystem {
-    gentoo: { include amavisd-new::gentoo }
-    centos: { include amavisd-new::centos }
+class amavisd_new(
+  $viruscheck = hiera('amavis_viruscheck',false),
+  $spamcheck = hiera('amavis_spamcheck',false)
+) {
+  case $::operatingsystem {
+    gentoo: { include amavisd_new::gentoo }
+    centos: { include amavisd_new::centos }
     debian,ubuntu: { include amavisd-new::debian }
-    default: { include amavisd-new::base }
+    default: { include amavisd_new::base }
   }
 
-  if $use_munin {
-    include amavisd-new::munin
+  if hiera('use_munin',false) {
+    include amavisd_new::munin
   }
 }

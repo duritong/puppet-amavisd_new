@@ -1,10 +1,10 @@
-class amavisd-new::munin {
+class amavisd_new::munin {
   munin::plugin::deploy{'amavis_':
     source => "amavisd-new/munin/amavis_",
     ensure => absent,
   }
-  
-  case $operatingsystem {
+
+  case $::operatingsystem {
     centos: { $munin_amavis_db_location = '/var/spool/amavisd/db/' }
     default: { $munin_amavis_db_location = '/var/lib/amavis/db' }
   }

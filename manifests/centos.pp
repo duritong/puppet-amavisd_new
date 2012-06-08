@@ -1,10 +1,10 @@
-class amavisd-new::centos inherits amavisd-new::base {
+class amavisd_new::centos inherits amavisd_new::base {
   Package['unarj']{
     name => 'arj',
   }
   file{'/etc/amavisd/amavisd.conf':
-    source => [ "puppet:///modules/site-amavisd-new/${fqdn}/amavisd.conf",
-                "puppet:///modules/site-amavisd-new/amavisd.conf",
+    source => [ "puppet:///modules/site_amavisd-new/${::fqdn}/amavisd.conf",
+                "puppet:///modules/site_amavisd-new/amavisd.conf",
                 "puppet:///modules/amavisd-new/amavisd.conf" ],
     require => Package['amavisd-new'],
     notify => Service['amavisd'],

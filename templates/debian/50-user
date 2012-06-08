@@ -10,7 +10,7 @@ use strict;
 # the directives you can use in this file
 #
 
-<% if (amavis_viruscheck == "true" ) -%>
+<% if scope.lookupvar('amavis::viruscheck') -%>
 # checks viruses
 @bypass_virus_checks_maps = (
    \%bypass_virus_checks, \@bypass_virus_checks_acl, \$bypass_virus_checks_re);
@@ -18,7 +18,7 @@ use strict;
 # virus checks disabled by puppet
 <% end -%>
 
-<% if (amavis_spamcheck == "true" ) -%>
+<% if scope.lookupvar('amavis::spamcheck') -%>
 # checks for spam
 @bypass_spam_checks_maps = (
    \%bypass_spam_checks, \@bypass_spam_checks_acl, \$bypass_spam_checks_re);

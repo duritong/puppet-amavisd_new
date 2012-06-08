@@ -7,8 +7,11 @@ For an integration into Postfix and a sample setup, check the README from the Po
 
 Configuration (Debian)
 ----------------------
-$amavis_viruscheck  : enables virus checks if true
-$amavis_spamcheck   : enables spam checks if true
+
+Class parameters
+
+$viruscheck  : enables virus checks if true
+$spamcheck   : enables spam checks if true
 
 Configuration (Debian)
 ----------------------

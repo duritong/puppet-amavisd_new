@@ -1,4 +1,4 @@
-class amavisd-new::gentoo inherits amavisd-new::base {
+class amavisd_new::gentoo inherits amavisd_new::base {
   Package['amavisd-new']{
     category => 'mail-filter',
   }
