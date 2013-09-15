@@ -4,6 +4,7 @@ class amavisd_new::centos inherits amavisd_new::base {
   }
   file{'/etc/amavisd/amavisd.conf':
     source => [ "puppet:///modules/site_amavisd_new/${::fqdn}/amavisd.conf",
+                "puppet:///modules/site_amavisd_new/${::operatingsystem}.${::operatingsystemmajrelease}/amavisd.conf",
                 "puppet:///modules/site_amavisd_new/amavisd.conf",
                 "puppet:///modules/amavisd_new/amavisd.conf" ],
     require => Package['amavisd-new'],
