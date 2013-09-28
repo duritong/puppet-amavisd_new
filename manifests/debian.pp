@@ -1,3 +1,4 @@
+# debian specific things
 class amavisd_new::debian inherits amavisd_new::base {
   # doesnt exist in debian lenny anymore, is package arj useful ?
   Package['unarj']{
@@ -8,10 +9,12 @@ class amavisd_new::debian inherits amavisd_new::base {
     name => 'amavis'
   }
 
-  file {"/etc/amavis/conf.d/50-user":
-    content => template("amavisd_new/debian/50-user"),
+  file {'/etc/amavis/conf.d/50-user':
+    content => template('amavisd_new/debian/50-user'),
     require => Package['amavisd-new'],
-    notify => Service['amavisd'],
-    owner => root, group => 0, mode => 0644;
+    notify  => Service['amavisd'],
+    owner   => root,
+    group   => 0,
+    mode    => '0644';
   }
 }

@@ -16,7 +16,7 @@ class amavisd_new::munin {
     config  => "env.amavis_db_home ${munin_amavis_db_location}\nuser amavis",
   }
   # this feature is only available in versions available on that system
-  if ($::operatingsystem == 'CentOS') and ($::operatingsystemmajrelease < 6)
+  if ($::operatingsystem == 'CentOS') and ($::operatingsystemmajrelease < 6) {
     munin::plugin{'amavis_cache':
       ensure  => 'amavis_',
       require => Munin::Plugin::Deploy['amavis_'],
