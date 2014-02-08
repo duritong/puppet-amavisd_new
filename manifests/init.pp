@@ -18,4 +18,8 @@ class amavisd_new(
   if $manage_munin {
     include amavisd_new::munin
   }
+
+  if str2bool($::selinux) {
+    include amavisd_new::selinux
+  }
 }
