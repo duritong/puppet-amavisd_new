@@ -4,14 +4,71 @@ class amavisd_new::centos inherits amavisd_new::base {
     name => 'arj',
   }
   file{'/etc/amavisd/amavisd.conf':
-    source  => ["puppet:///modules/site_amavisd_new/${::fqdn}/amavisd.conf",
-                "puppet:///modules/site_amavisd_new/${::operatingsystem}.${::operatingsystemmajrelease}/amavisd.conf",
-                'puppet:///modules/site_amavisd_new/amavisd.conf',
-                'puppet:///modules/amavisd_new/amavisd.conf' ],
     require => Package['amavisd-new'],
     notify  => Service['amavisd'],
     owner   => root,
     group   => 0,
     mode    => '0644';
+  }
+  if $amavisd_new::config_content {
+    File['/etc/amavisd/amavisd.conf']{
+      content => $amavisd_new::config_content
+    }
+  } else {
+    File['/etc/amavisd/amavisd.conf']{
+      source => ["puppet:///modules/${amavisd_new::site_config}/${::fqdn}/amavisd.conf",
+                "puppet:///modules/${amavisd_new::site_config}/${::operatingsystem}.${::operatingsystemmajrelease}/amavisd.conf",
+                "puppet:///modules/${amavisd_new::site_config}/amavisd.conf",
+                'puppet:///modules/amavisd_new/amavisd.conf' ]
+    }
+  }
+  service{'clamd.amavisd':
+    ensure  => running,
+    enable  => true,
+    require => Package['amavisd-new'],
+  }
+
+  require clamav
+  if versioncmp($::operatingsystemmajrelease,'6') > 0 {
+    Package['zoo']{
+      name => 'unzoo',
+    }
+    Service['clamd.amavisd']{
+      name => 'clamd@amavisd',
+    }
+    # http://www.server-world.info/en/note?os=CentOS_7&p=mail&f=6
+    package{'clamav-server-systemd':
+      ensure => present,
+      before => Service['clamd.amavisd'],
+    }
+    file{
+      '/etc/tmpfiles.d/clamd.amavisd.conf':
+        content => "d /var/run/clamd.amavisd 0755 amavis amavis -\n",
+        owner   => root,
+        group   => 0,
+        mode    => '0644',
+        notify  => Service['clamd.amavisd'];
+    }
+
+    include ::systemd
+    concat{'/etc/systemd/system/clamd@amavisd.service':
+      owner  => root,
+      group  => 0,
+      mode   => '0644',
+      notify => [ Exec['systemctl-daemon-reload'],Service['clamd.amavisd'], ]
+    }
+    Exec['systemctl-daemon-reload'] -> Service['clamd.amavisd']
+    concat::fragment{
+      'systemd-clamd-base':
+        target  => '/etc/systemd/system/clamd@amavisd.service',
+        source  => '/usr/lib/systemd/system/clamd@.service',
+        require => Package['clamav-server-systemd'],
+        order   => '010';
+      'systemd-clamd-install':
+        target  => '/etc/systemd/system/clamd@amavisd.service',
+        content => "\n[Install]\nWantedBy=multi-user.target\n",
+        order   => '020',
+    }
+
   }
 }
