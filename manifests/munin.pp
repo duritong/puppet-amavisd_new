@@ -6,7 +6,7 @@ class amavisd_new::munin {
   }
 
   case $::operatingsystem {
-    centos: { $munin_amavis_db_location = '/var/spool/amavisd/db/' }
+    'CentOS': { $munin_amavis_db_location = '/var/spool/amavisd/db/' }
     default: { $munin_amavis_db_location = '/var/lib/amavis/db' }
   }
 
@@ -16,7 +16,7 @@ class amavisd_new::munin {
     config  => "env.amavis_db_home ${munin_amavis_db_location}\nuser amavis",
   }
   # this feature is only available in versions available on that system
-  if ($::operatingsystem == 'CentOS') and ($::operatingsystemmajrelease < 6) {
+  if ($::operatingsystem == 'CentOS') and versioncmp($::operatingsystemmajrelease,'6') < 0 {
     munin::plugin{'amavis_cache':
       ensure  => 'amavis_',
       require => Munin::Plugin::Deploy['amavis_'],
