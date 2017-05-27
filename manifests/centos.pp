@@ -71,4 +71,12 @@ class amavisd_new::centos inherits amavisd_new::base {
     }
 
   }
+
+  file{'/etc/logrotate.d/razor':
+    source  => 'puppet:///modules/amavisd_new/logrotate/razor',
+    owner   => root,
+    group   => 0,
+    mode    => '0644',
+    require => Package['amavisd-new'],
+  }
 }

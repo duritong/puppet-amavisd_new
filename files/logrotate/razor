@@ -1,0 +1,8 @@
+/var/spool/amavisd/.razor/razor-agent.log {
+    missingok
+    notifempty
+    compress
+    daily
+    copytruncate
+    create 0600 amavis amavis
+}
