@@ -1,4 +1,4 @@
-/var/spool/amavisd/.razor/razor-agent.log {
+/var/spool/amavisd/.razor/logs/razor-agent.log {
     missingok
     notifempty
     compress

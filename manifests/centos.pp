@@ -72,11 +72,30 @@ class amavisd_new::centos inherits amavisd_new::base {
 
   }
 
-  file{'/etc/logrotate.d/razor':
+  selinux::fcontext{
+    '/var/spool/amavisd/\.razor/logs(/.*)?':
+      setype  => 'antivirus_log_t',
+      require => Package['amavisd-new'];
+  } -> file{
+    [ '/var/spool/amavisd/.razor','/var/spool/amavisd/.razor/logs' ]:
+      ensure => directory,
+      owner   => 'amavis',
+      group   => 'amavis',
+      mode    => '0640';
+    '/var/spool/amavisd/.razor/razor-agent.conf':
+      content => "logfile=/var/spool/amavisd/.razor/logs/razor-agent.log\n",
+      owner   => 'amavis',
+      group   => 'amavis',
+      mode    => '0600';
+  } -> file{'/etc/logrotate.d/razor':
     source  => 'puppet:///modules/amavisd_new/logrotate/razor',
     owner   => root,
     group   => 0,
     mode    => '0644',
-    require => Package['amavisd-new'],
+  } -> file{'/var/spool/amavisd/.razor/razor-agent.log':
+    ensure => absent, # can be removed once this got rolled out
+  }
+  File['/var/spool/amavisd/.razor/logs']{
+    seltype => 'antivirus_log_t',
   }
 }
