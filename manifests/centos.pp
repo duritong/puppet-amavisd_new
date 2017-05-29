@@ -55,7 +55,7 @@ class amavisd_new::centos inherits amavisd_new::base {
       owner  => root,
       group  => 0,
       mode   => '0644',
-      notify => [ Exec['systemctl-daemon-reload'],Service['clamd.amavisd'], ]
+      notify => [ Exec['systemctl-daemon-reload'],Service['clamd.amavisd'], ],
     }
     Exec['systemctl-daemon-reload'] -> Service['clamd.amavisd']
     concat::fragment{
@@ -88,10 +88,10 @@ class amavisd_new::centos inherits amavisd_new::base {
       group   => 'amavis',
       mode    => '0600';
   } -> file{'/etc/logrotate.d/razor':
-    source  => 'puppet:///modules/amavisd_new/logrotate/razor',
-    owner   => root,
-    group   => 0,
-    mode    => '0644',
+    source => 'puppet:///modules/amavisd_new/logrotate/razor',
+    owner  => root,
+    group  => 0,
+    mode   => '0644',
   } -> file{'/var/spool/amavisd/.razor/razor-agent.log':
     ensure => absent, # can be removed once this got rolled out
   }
