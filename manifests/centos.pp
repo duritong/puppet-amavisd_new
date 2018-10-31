@@ -34,7 +34,8 @@ class amavisd_new::centos inherits amavisd_new::base {
       name => 'unzoo',
     }
     Service['clamd.amavisd']{
-      name => 'clamd@amavisd',
+      name    => 'clamd@amavisd',
+      require => File_line['enable_freshclam'],
     }
     # http://www.server-world.info/en/note?os=CentOS_7&p=mail&f=6
     package{'clamav-server-systemd':
