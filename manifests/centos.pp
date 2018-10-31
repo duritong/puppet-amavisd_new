@@ -28,7 +28,7 @@ class amavisd_new::centos inherits amavisd_new::base {
     require => Package['amavisd-new'],
   }
 
-  require clamav
+  require ::clamav
   if versioncmp($::operatingsystemmajrelease,'6') > 0 {
     Package['zoo']{
       name => 'unzoo',
@@ -80,9 +80,9 @@ class amavisd_new::centos inherits amavisd_new::base {
   } -> file{
     [ '/var/spool/amavisd/.razor','/var/spool/amavisd/.razor/logs' ]:
       ensure => directory,
-      owner   => 'amavis',
-      group   => 'amavis',
-      mode    => '0640';
+      owner  => 'amavis',
+      group  => 'amavis',
+      mode   => '0640';
     '/var/spool/amavisd/.razor/razor-agent.conf':
       content => "logfile=/var/spool/amavisd/.razor/logs/razor-agent.log\n",
       owner   => 'amavis',
