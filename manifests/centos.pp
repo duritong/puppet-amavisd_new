@@ -36,11 +36,6 @@ class amavisd_new::centos inherits amavisd_new::base {
     File_line['enable_freshclam'] -> Service['clamd.amavisd']{
       name    => 'clamd@amavisd',
     }
-    # http://www.server-world.info/en/note?os=CentOS_7&p=mail&f=6
-    package{'clamav-server-systemd':
-      ensure => present,
-      before => Service['clamd.amavisd'],
-    }
     file{
       '/etc/tmpfiles.d/clamd.amavisd.conf':
         content => "d /var/run/clamd.amavisd 0755 amavis amavis -\n",
@@ -62,7 +57,7 @@ class amavisd_new::centos inherits amavisd_new::base {
       'systemd-clamd-base':
         target  => '/etc/systemd/system/clamd@amavisd.service',
         source  => '/usr/lib/systemd/system/clamd@.service',
-        require => Package['clamav-server-systemd'],
+        require => Package['amavisd-new'],
         order   => '010';
       'systemd-clamd-install':
         target  => '/etc/systemd/system/clamd@amavisd.service',
