@@ -46,24 +46,15 @@ class amavisd_new::centos inherits amavisd_new::base {
     }
 
     include ::systemd
-    concat{'/etc/systemd/system/clamd@amavisd.service':
-      owner  => root,
-      group  => 0,
-      mode   => '0644',
-      notify => [ Exec['systemctl-daemon-reload'],Service['clamd.amavisd'], ],
-    }
+    systemd::dropin_file{
+      default:
+        unit => 'clamd@amavisd.service';
+      'amavisd-tunings':
+        content => "[Install]\nWantedBy=multi-user.target";
+      'amavisd-tunings':
+        content => "[Service]\nTimeoutStartSec = 300";
+    } ~> Service['clamd.amavisd']
     Exec['systemctl-daemon-reload'] -> Service['clamd.amavisd']
-    concat::fragment{
-      'systemd-clamd-base':
-        target  => '/etc/systemd/system/clamd@amavisd.service',
-        source  => '/usr/lib/systemd/system/clamd@.service',
-        require => Package['amavisd-new'],
-        order   => '010';
-      'systemd-clamd-install':
-        target  => '/etc/systemd/system/clamd@amavisd.service',
-        content => "\n[Install]\nWantedBy=multi-user.target\n",
-        order   => '020',
-    }
 
   }
 
