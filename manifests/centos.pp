@@ -49,9 +49,9 @@ class amavisd_new::centos inherits amavisd_new::base {
     systemd::dropin_file{
       default:
         unit => 'clamd@amavisd.service';
-      'amavisd-tunings':
+      'amavisd-tunings.conf':
         content => "[Install]\nWantedBy=multi-user.target";
-      'amavisd-startup-timeout':
+      'amavisd-startup-timeout.conf':
         content => "[Service]\nTimeoutStartSec = 300";
     } ~> Service['clamd.amavisd']
     Exec['systemctl-daemon-reload'] -> Service['clamd.amavisd']
