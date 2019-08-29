@@ -51,7 +51,7 @@ class amavisd_new::centos inherits amavisd_new::base {
         unit => 'clamd@amavisd.service';
       'amavisd-tunings':
         content => "[Install]\nWantedBy=multi-user.target";
-      'amavisd-tunings':
+      'amavisd-startup-timeout':
         content => "[Service]\nTimeoutStartSec = 300";
     } ~> Service['clamd.amavisd']
     Exec['systemctl-daemon-reload'] -> Service['clamd.amavisd']
