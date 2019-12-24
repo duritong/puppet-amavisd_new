@@ -22,41 +22,42 @@ class amavisd_new::centos inherits amavisd_new::base {
                 'puppet:///modules/amavisd_new/amavisd.conf' ]
     }
   }
+
   service{'clamd.amavisd':
     ensure  => running,
     enable  => true,
-    require => Package['amavisd-new'],
+    require => Package['amavisd-new','clamd'],
   }
 
   require ::clamav
-  if versioncmp($::operatingsystemmajrelease,'6') > 0 {
-    Package['zoo']{
-      name => 'unzoo',
-    }
-    File_line['enable_freshclam'] -> Service['clamd.amavisd']{
-      name    => 'clamd@amavisd',
-    }
-    file{
-      '/etc/tmpfiles.d/clamd.amavisd.conf':
-        content => "d /var/run/clamd.amavisd 0755 amavis amavis -\n",
-        owner   => root,
-        group   => 0,
-        mode    => '0644',
-        notify  => Service['clamd.amavisd'];
-    }
-
-    include ::systemd
-    systemd::dropin_file{
-      default:
-        unit => 'clamd@amavisd.service';
-      'amavisd-tunings.conf':
-        content => "[Install]\nWantedBy=multi-user.target";
-      'amavisd-startup-timeout.conf':
-        content => "[Service]\nTimeoutStartSec = 300";
-    } ~> Service['clamd.amavisd']
-    Exec['systemctl-daemon-reload'] -> Service['clamd.amavisd']
-
+  package{'clamd':
+    ensure => present,
   }
+  Package['zoo']{
+    name => 'unzoo',
+  }
+  File_line['enable_freshclam'] -> Service['clamd.amavisd']{
+    name    => 'clamd@amavisd',
+  }
+  file{
+    '/etc/tmpfiles.d/clamd.amavisd.conf':
+      content => "d /var/run/clamd.amavisd 0755 amavis amavis -\n",
+      owner   => root,
+      group   => 0,
+      mode    => '0644',
+      notify  => Service['clamd.amavisd'];
+  }
+
+  include ::systemd
+  systemd::dropin_file{
+    default:
+      unit => 'clamd@amavisd.service';
+    'amavisd-tunings.conf':
+      content => "[Install]\nWantedBy=multi-user.target";
+    'amavisd-startup-timeout.conf':
+      content => "[Service]\nTimeoutStartSec = 300";
+  } ~> Service['clamd.amavisd']
+  Exec['systemctl-daemon-reload'] -> Service['clamd.amavisd']
 
   selinux::fcontext{
     '/var/spool/amavisd/\.razor/logs(/.*)?':
