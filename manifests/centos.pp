@@ -26,7 +26,8 @@ class amavisd_new::centos inherits amavisd_new::base {
   service{'clamd.amavisd':
     ensure  => running,
     enable  => true,
-    require => Package['amavisd-new','clamd'],
+    require => [ Package['amavisd-new','clamd'],
+                Exec['init-clamav-db'], ],
   }
 
   require ::clamav
