@@ -10,7 +10,6 @@ class amavisd_new(
   $config_content = false,
 ) {
   case $::operatingsystem {
-    gentoo: { include amavisd_new::gentoo }
     centos: { include amavisd_new::centos }
     debian,ubuntu: { include amavisd_new::debian }
     default: { include amavisd_new::base }

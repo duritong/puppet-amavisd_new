@@ -4,7 +4,7 @@ class amavisd_new::centos inherits amavisd_new::base {
     name => 'arj',
   }
   file{'/etc/amavisd/amavisd.conf':
-    require => Package['amavisd-new'],
+    require => Package['amavis'],
     notify  => Service['amavisd'],
     owner   => root,
     group   => 0,
@@ -26,7 +26,7 @@ class amavisd_new::centos inherits amavisd_new::base {
   service{'clamd.amavisd':
     ensure  => running,
     enable  => true,
-    require => [ Package['amavisd-new','clamd'],
+    require => [ Package['amavis','clamd'],
                 Exec['init-clamav-db'], ],
   }
 
@@ -63,7 +63,7 @@ class amavisd_new::centos inherits amavisd_new::base {
   selinux::fcontext{
     '/var/spool/amavisd/\.razor/logs(/.*)?':
       setype  => 'antivirus_log_t',
-      require => Package['amavisd-new'];
+      require => Package['amavis'];
   } -> file{
     [ '/var/spool/amavisd/.razor','/var/spool/amavisd/.razor/logs' ]:
       ensure => directory,

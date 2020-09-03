@@ -5,15 +5,11 @@ class amavisd_new::base {
   require unrar
   ensure_packages([ 'arc', 'cabextract', 'freeze', 'lha', 'zoo', 'unarj', 'lz4'])
 
-  package{'amavisd-new':
+  package{'amavis':
     ensure  => installed,
     require => Package['arc', 'cabextract', 'freeze', 'lha', 'zoo', 'unarj', 'lz4'],
-  }
-
-  service{'amavisd':
+  } -> service{'amavisd':
     ensure    => running,
     enable    => true,
-    hasstatus => true,
-    require   => Package['amavisd-new'],
   }
 }

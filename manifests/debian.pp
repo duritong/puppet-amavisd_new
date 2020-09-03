@@ -11,7 +11,7 @@ class amavisd_new::debian inherits amavisd_new::base {
 
   file {'/etc/amavis/conf.d/50-user':
     content => template('amavisd_new/debian/50-user'),
-    require => Package['amavisd-new'],
+    require => Package['amavis'],
     notify  => Service['amavisd'],
     owner   => root,
     group   => 0,
