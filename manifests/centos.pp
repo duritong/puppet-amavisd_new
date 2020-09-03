@@ -30,7 +30,7 @@ class amavisd_new::centos inherits amavisd_new::base {
                 Exec['init-clamav-db'], ],
   }
 
-  require ::clamav
+  require clamav
   package{'clamd':
     ensure => present,
   }
@@ -49,7 +49,7 @@ class amavisd_new::centos inherits amavisd_new::base {
       notify  => Service['clamd.amavisd'];
   }
 
-  include ::systemd
+  include systemd
   systemd::dropin_file{
     default:
       unit => 'clamd@amavisd.service';
