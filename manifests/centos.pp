@@ -40,14 +40,6 @@ class amavisd_new::centos inherits amavisd_new::base {
   File_line['enable_freshclam'] -> Service['clamd.amavisd'] {
     name    => 'clamd@amavisd',
   }
-  file {
-    '/etc/tmpfiles.d/clamd.amavisd.conf':
-      content => "d /var/run/clamd.amavisd 0755 amavis amavis -\n",
-      owner   => root,
-      group   => 0,
-      mode    => '0644',
-      notify  => Service['clamd.amavisd'];
-  }
 
   systemd::dropin_file {
     default:
